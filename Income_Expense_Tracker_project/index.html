@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#" onclick="showPage('dashboard')"><i class="ri-money-rupee-circle-line"></i>Expense Tracker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="#" onclick="showPage('dashboard')">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="showPage('transactions')">Transactions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="showPage('categories')">Categories</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="showPage('export')">Export & Backup</a>
+          </li>
+        </ul>
+      </div>
+      <div class="form-check form-switch ms-3">
+        <input class="form-check-input" type="checkbox" id="darkModeToggle">
+        <label class="form-check-label text-light" for="darkModeToggle">Dark Mode</label>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Page -->
+  <div id="dashboard" class="page active">
+    <div class="container py-4">
+      <section class="main-info row g-4">
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body text-center">
+              <h2>Total Balance</h2>
+              <p id="total-Bal" class="balance">0.00</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body text-center">
+              <h2>Total Income</h2>
+              <p id="total-inc" class="income">0.00</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body text-center">
+              <h2>Total Expense</h2>
+              <p id="total-exp" class="expense">0.00</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="add-transaction mt-5">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="card-title text-center mb-4">Add Transaction</h1>
+            <form id="transactionform">
+              <div class="mb-3">
+               <div class="toggle-container">
+                <input type="checkbox" id="type" class="toggle-input">
+                <label for="type" class="toggle-label">
+                  <span class="toggle-expense">EXPENSE</span>
+                  <span class="toggle-income">INCOME</span>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              </div>
+              <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" name="name" required>
+              </div>
+              <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" name="category" id="category" required>
+                  <optgroup label="Income Categories" class="income-categories">
+                  </optgroup>
+                  <optgroup label="Expense Categories" class="expense-categories">
+                  </optgroup>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="amount" class="form-label">Amount</label>
+                <input type="number" class="form-control" name="amount" min="0.01" step="0.01" required>
+              </div>
+              <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" name="date" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Add Transaction</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="transactions mt-5">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title text-center mb-4">Recent Transactions</h2>
+            <ul id="transactionlist" class="list-group"></ul>
+            <div id="status" class="text-center mt-3"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Categories Page -->
+  <div id="categories" class="page">
+    <div class="container py-4">
+      <div class="row">
+        <!-- Income Categories -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">Income Categories</h2>
+              <form id="addIncomeCategoryForm" class="mb-4">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="New Income Category" required>
+                  <button class="btn btn-success" type="submit">Add</button>
+                </div>
+              </form>
+              <ul id="incomeCategoriesList" class="list-group">
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Expense Categories -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">Expense Categories</h2>
+              <form id="addExpenseCategoryForm" class="mb-4">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="New Expense Category" required>
+                  <button class="btn btn-success" type="submit">Add</button>
+                </div>
+              </form>
+              <ul id="expenseCategoriesList" class="list-group">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transactions Page -->
+  <div id="transactions" class="page">
+    <div class="container py-4">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">All Transactions</h2>
+          
+          <!-- Filters -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-3">
+              <label class="form-label">Date Range</label>
+              <input type="date" class="form-control" id="dateFilter">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Category</label>
+              <select class="form-select" id="categoryFilter">
+                <option value="">All Categories</option>
+                <optgroup label="Income Categories" class="income-categories">
+                </optgroup>
+                <optgroup label="Expense Categories" class="expense-categories">
+                </optgroup>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Min Amount</label>
+              <input type="number" class="form-control" id="minAmountFilter">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Max Amount</label>
+              <input type="number" class="form-control" id="maxAmountFilter">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Search</label>
+              <input type="text" class="form-control" id="searchFilter" placeholder="Search transactions...">
+            </div>
+          </div>
+
+          <!-- Transactions Table -->
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="transactionsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export & Backup Page -->
+  <div id="export" class="page">
+    <div class="container py-4">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Export & Backup</h2>
+          
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h3 class="card-title">Export Data</h3>
+                  <p class="card-text">Download your transaction data in different formats.</p>
+                  <div class="mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="exportStartDate">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="exportEndDate">
+                  </div>
+                  <button class="btn btn-primary me-2" onclick="exportData('csv')">Export as CSV</button>
+                  <button class="btn btn-primary" onclick="exportData('pdf')">Export as PDF</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h3 class="card-title">Backup & Restore</h3>
+                  <p class="card-text">Save or load your transaction data.</p>
+                  <button class="btn btn-success me-2" onclick="backupData()">Backup Data</button>
+                  <label class="btn btn-info me-2">
+                    Restore Data
+                    <input type="file" id="restoreFile" accept=".json" class="d-none" onchange="restoreData(event)">
+                  </label>
+                  <button class="btn btn-danger" onclick="clearData()">Clear All Data</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll to top button -->
+  <div class="scroll-top">
+    <i class="ri-arrow-up-line"></i>
+  </div>
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
